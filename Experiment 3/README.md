@@ -10,83 +10,73 @@ Date of Performance: 27 January,2026
 
                                         Experiment No. : 3
 
+
 1.	Aim/Overview of the practical:
-To implement conditional decision-making logic in PostgreSQL using IF–ELSE constructs and CASE expressions for classification, validation, and rule-based data processing. 
+To implement conditional decision-making logic in PostgreSQL using IF–ELSE constructs and CASE expressions for classification, validation, and rule-based data processing.
+2.	Tools Used
+PostgreSQL
 
-2.	Objective:
-After completing this practical, the student will be able to: 
-• To understand conditional execution in SQL 
-• To implement decision-making logic using CASE expressions 
-• To simulate real-world rule validation scenarios 
-• To classify data based on multiple conditions
+3.	Objective:
+o	To understand conditional execution in SQL
 
-3.	Software Used:
-•	PostgreSQL
-•	pgAdmin4
+o	To implement decision-making logic using CASE expressions
+
+o	To simulate real-world rule validation scenarios
+
+o	To classify data based on multiple conditions
+
+o	To strengthen SQL logic skills required in interviews and backend systems
 
 4.	Code for experiment/Practical: 
 
 
-CREATE TABLE customer_orders (
-    order_id INT PRIMARY KEY,
-    customer_name VARCHAR(50),
-    product VARCHAR(50),
-    quantity INT,
-    price NUMERIC(10,2),
-    order_date DATE
+CREATE TABLE dept_violations (
+    dept_id SERIAL PRIMARY KEY,
+    dept_name VARCHAR(100),
+    violation_count INT NOT NULL
 );
+INSERT INTO dept_violations (dept_name, violation_count) VALUES
+('HR', 0),
+('IT', 2),
+('Finance', 5),
+('Operations', 1);
 
-INSERT INTO customer_orders (order_id, customer_name, product, quantity, price, order_date) VALUES
-(1001,'Amit', 'Laptop', 1, 55000, '2024-01-10'),
-(2002,'Neha', 'Mobile', 2, 30000, '2024-01-12'),
-(3003,'Ravi', 'Laptop', 1, 60000, '2024-01-15'),
-(4004,'Priya', 'Tablet', 3, 45000, '2024-01-18'),
-(5005,'Karan', 'Mobile', 1, 15000, '2024-01-20'),
-(6006,'Anita', 'Laptop', 2, 110000, '2024-01-22');
+--
 
-SELECT * 
-FROM customer_orders
-WHERE price > 40000;
+SELECT 
+    dept_violations,
+    violation_count,
+    CASE 
+        WHEN violation_count = 0 THEN 'No Violation'
+        WHEN violation_count BETWEEN 1 AND 2 THEN 'Minor Violation'
+        ELSE 'Critical Violation'
+    END AS violation_category
+FROM dept_violations;
 
-SELECT customer_name, product, price
-FROM customer_orders
-ORDER BY price ASC;
+--
 
-SELECT customer_name, product, price
-FROM customer_orders
-ORDER BY price DESC;
+ALTER TABLE dept_violations
+ADD COLUMN approval_status VARCHAR(50);
 
-SELECT customer_name, product, price
-FROM customer_orders
-ORDER BY product ASC, price DESC;
+--
 
-SELECT product, SUM(price) AS total_sales
-FROM customer_orders
-GROUP BY product;
+UPDATE dept_violations
+SET approval_status = 
+    CASE
+        WHEN violation_count = 0 THEN 'Approved'
+        WHEN violation_count BETWEEN 1 AND 3 THEN 'Under Review'
+        ELSE 'Rejected'
+    END;
 
-SELECT product, SUM(price) AS total_sales
-FROM customer_orders
-GROUP BY product
-HAVING SUM(price) > 70000;
+--
+
+Select * from dept_violations;
 
 
-6. I/O Analysis (Input / Output)
-Input:
-• Customer order details 
-• Filtering, sorting, grouping, and aggregation queries 
-
-Output: 
-• Filtered customer records 
-• Sorted result sets 
-• Group-wise sales summary 
-• Aggregated revenue reports (Screenshots of execution and output attached)
 
 
 Learning outcomes (What I have learnt):
 
-• Students understand how data can be filtered to retrieve only relevant records. 
-• Students learn how sorting improves readability and usefulness of reports. 
-• Students gain the ability to group data for analytical purposes. 
-• Students clearly differentiate between WHERE and HAVING clauses. 
-• Students develop confidence in writing analytical SQL queries. 
-• Students are better prepared for SQL-based placement and interview questions.
+•	Understand how to use CASE expressions to classify data 
+•	Learn to apply conditional logic in SQL for categorizing and evaluating database records.
+•	Perform automated data updates using CASE inside UPDATE statements.
